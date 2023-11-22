@@ -17,6 +17,7 @@ namespace ConsoleApp_for_Rooting_Server
             // etape 1: regarder le trajet de start a end a pied pour s'en servir comme base
             // appel a l'api nominatim pour trouver start et end
             string nominatimApi = "https://nominatim.openstreetmap.org";
+            string openRouteServiceApi = "https://api.openrouteservice.org/v2";
             string getStartLocation = "/search?q=" + start + "&format=json&polygon_kml=1&addressdetails=1";
             string getEndLocation = "/search?q=" + end + "&format=json&polygon_kml=1&addressdetails=1";
 
@@ -32,7 +33,6 @@ namespace ConsoleApp_for_Rooting_Server
             Task<HttpResponseMessage> responseStart = client.SendAsync(requestStart);
             Task<HttpResponseMessage> responseEnd = client.SendAsync(requestEnd);
 
-            Task.WaitAll(responseStart, responseEnd);
 
             // Lire et afficher le contenu des réponses
             string contentStart = await responseStart.Result.Content.ReadAsStringAsync();
@@ -42,6 +42,19 @@ namespace ConsoleApp_for_Rooting_Server
             Console.WriteLine(getLocation(contentStart));
             Console.WriteLine("End point location:");
             Console.WriteLine(getLocation(contentEnd));
+
+            string startLocation=getLocation(contentStart);
+            string endLocation=getLocation(contentEnd);
+            string profile = "foot-walking";
+
+            string uriItinerary = "/directions/"+ profile +"?api_key=5b3ce3597851110001cf624833fd1c84c80546dbbd1400fe7eb552e3&start=" + startLocation + "&end=" + endLocation;
+
+            HttpRequestMessage requestItinerary = new HttpRequestMessage(HttpMethod.Get, openRouteServiceApi + uriItinerary);
+
+            Task<HttpResponseMessage> responseItinerary = client.SendAsync(requestItinerary);
+
+            string contentItinerary = await responseItinerary.Result.Content.ReadAsStringAsync();
+            Console.WriteLine(contentItinerary);
 
             // appel a l'api openrouteservice pour trouver le trajet
             // etape 2: trouver la station de velo la plus proche de start et celle plus proche de end
