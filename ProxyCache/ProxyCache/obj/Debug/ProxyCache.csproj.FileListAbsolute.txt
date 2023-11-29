@@ -1,0 +1,7 @@
+C:\Users\33671\Documents\Middleware\LetsGoBiking\ProxyCache\ProxyCache\bin\Debug\ProxyCache.dll.config
+C:\Users\33671\Documents\Middleware\LetsGoBiking\ProxyCache\ProxyCache\bin\Debug\ProxyCache.dll
+C:\Users\33671\Documents\Middleware\LetsGoBiking\ProxyCache\ProxyCache\bin\Debug\ProxyCache.pdb
+C:\Users\33671\Documents\Middleware\LetsGoBiking\ProxyCache\ProxyCache\obj\Debug\ProxyCache.csproj.AssemblyReference.cache
+C:\Users\33671\Documents\Middleware\LetsGoBiking\ProxyCache\ProxyCache\obj\Debug\ProxyCache.csproj.CoreCompileInputs.cache
+C:\Users\33671\Documents\Middleware\LetsGoBiking\ProxyCache\ProxyCache\obj\Debug\ProxyCache.dll
+C:\Users\33671\Documents\Middleware\LetsGoBiking\ProxyCache\ProxyCache\obj\Debug\ProxyCache.pdb

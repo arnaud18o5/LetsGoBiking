@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿
+using ConsoleApp_for_Self_Hosted_WS.ServiceReference1;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +14,7 @@ namespace ConsoleApp_for_Rooting_Server
 {
     class RootingServer : IRootingServer
     {
+        ProxyClient proxyClient = new ProxyClient();
         public async void getItinerary(string start, string end)
         {
             // etape 1: regarder le trajet de start a end a pied pour s'en servir comme base
@@ -20,7 +23,9 @@ namespace ConsoleApp_for_Rooting_Server
             string openRouteServiceApi = "https://api.openrouteservice.org/v2";
             string getStartLocation = "/search?q=" + start + "&format=json&polygon_kml=1&addressdetails=1";
             string getEndLocation = "/search?q=" + end + "&format=json&polygon_kml=1&addressdetails=1";
-
+            string response = proxyClient.Get(nominatimApi + getStartLocation);
+            Console.WriteLine(response);
+            /*
             HttpClient client = new HttpClient();
             HttpRequestMessage requestStart = new HttpRequestMessage(HttpMethod.Get, nominatimApi + getStartLocation);
             HttpRequestMessage requestEnd = new HttpRequestMessage(HttpMethod.Get, nominatimApi + getEndLocation);
@@ -54,9 +59,10 @@ namespace ConsoleApp_for_Rooting_Server
             Task<HttpResponseMessage> responseItinerary = client.SendAsync(requestItinerary);
 
             string contentItinerary = await responseItinerary.Result.Content.ReadAsStringAsync();
-            Console.WriteLine(contentItinerary);
+            Console.WriteLine(contentItinerary);*/
 
             // appel a l'api openrouteservice pour trouver le trajet
+
             // etape 2: trouver la station de velo la plus proche de start et celle plus proche de end
             // dans toutes les stations du contrat trouver les x plus proches a vol d'oiseau de start et celles de end (appel api jcdecaux ou recherche dans cache)
             // dans les x stations trouvées, calculer le trajet a pied le plus proches de start et de end 
