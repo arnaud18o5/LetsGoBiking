@@ -1,48 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://localhost:8091/ProxyCache?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/System" />
-  <xs:element name="Get">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="CacheItemName" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="GetResult" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetWithDTSeconds">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="CacheItemName" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="dt_seconds" type="xs:double" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetWithDTSecondsResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="GetWithDTSecondsResult" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetWithDT">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="CacheItemName" nillable="true" type="xs:string" />
-        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/System" minOccurs="0" name="dt" type="q1:DateTimeOffset" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetWithDTResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="GetWithDTResult" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/System" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/System" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://192.168.1.52:8091/ProxyCache?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:complexType name="DateTimeOffset">
+    <xs:annotation>
+      <xs:appinfo>
+        <IsValueType xmlns="http://schemas.microsoft.com/2003/10/Serialization/">true</IsValueType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="DateTime" type="xs:dateTime" />
+      <xs:element name="OffsetMinutes" type="xs:short" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DateTimeOffset" nillable="true" type="tns:DateTimeOffset" />
 </xs:schema>

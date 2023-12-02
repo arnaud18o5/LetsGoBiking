@@ -212,9 +212,9 @@
   </wsp:Policy>
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
-      <xsd:import schemaLocation="http://localhost:8091/ProxyCache?xsd=xsd0" namespace="http://tempuri.org/" />
-      <xsd:import schemaLocation="http://localhost:8091/ProxyCache?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://localhost:8091/ProxyCache?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/System" />
+      <xsd:import schemaLocation="http://192.168.1.52:8091/ProxyCache?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://192.168.1.52:8091/ProxyCache?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://192.168.1.52:8091/ProxyCache?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/System" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IProxy_Get_InputMessage">
@@ -288,9 +288,9 @@
   </wsdl:binding>
   <wsdl:service name="Proxy">
     <wsdl:port name="WSHttpBinding_IProxy" binding="tns:WSHttpBinding_IProxy">
-      <soap12:address location="http://localhost:8091/ProxyCache" />
+      <soap12:address location="http://192.168.1.52:8091/ProxyCache" />
       <wsa10:EndpointReference>
-        <wsa10:Address>http://localhost:8091/ProxyCache</wsa10:Address>
+        <wsa10:Address>http://192.168.1.52:8091/ProxyCache</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
           <Upn>PC-DE-ARNAUD\33671</Upn>
         </Identity>

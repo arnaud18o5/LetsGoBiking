@@ -15,9 +15,10 @@ namespace Proxy
         public T Get(string CacheItemName)
         {
             // we assume that the cacheItemName is the request
-            if (!_cache.Contains(CacheItemName))
+            if (!_cache.Contains(CacheItemName) || _cache.Get(CacheItemName) == null)
             {
-                // faire le call api et mettre en cache 
+                // faire le call api et mettre en cache
+                Console.WriteLine("Get " + CacheItemName);
                 Task<string> result = requestAsync(CacheItemName);
                 _cache.Add(CacheItemName, result.Result, DateTimeOffset.Now.AddSeconds(dt_default_secondes));
             }
@@ -51,15 +52,30 @@ namespace Proxy
 
         private async Task<string> requestAsync(string url)
         {
-            HttpClient client = new HttpClient();
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, url);
-            request.Headers.Referrer = new Uri("https://facebook.com");
-            Task<HttpResponseMessage> response = client.SendAsync(request);
+            using (HttpClient client = new HttpClient())
+            {
+                // Augmentez la taille maximale du contenu de la réponse selon vos besoins
+                client.MaxResponseContentBufferSize = int.MaxValue;
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, url);
+                request.Headers.Referrer = new Uri("https://facebook.com");
 
+                try
+                {
+                    HttpResponseMessage response = await client.SendAsync(request);
 
-            // Lire et afficher le contenu des réponses
-            string contentStart = await response.Result.Content.ReadAsStringAsync();
-            return contentStart;
+                    // Vérifiez si la réponse est réussie (200 OK) avant de lire le contenu
+                    response.EnsureSuccessStatusCode();
+
+                    // Lire et retourner le contenu de la réponse
+                    return await response.Content.ReadAsStringAsync();
+                }
+                catch (HttpRequestException ex)
+                {
+                    // Gérez les erreurs de requête HTTP ici
+                    Console.WriteLine($"Une erreur HTTP s'est produite : {ex.Message}");
+                    return null; // Ou lancez une exception appropriée selon vos besoins
+                }
+            }
         }
     }
 }

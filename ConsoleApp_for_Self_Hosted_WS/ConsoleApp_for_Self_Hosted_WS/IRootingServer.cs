@@ -14,6 +14,10 @@ namespace ConsoleApp_for_Rooting_Server
     {
         [OperationContract()]
         void getItinerary(string start, string end);
+
+
+        [OperationContract()]
+        void test();
     }
 
 

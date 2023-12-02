@@ -11,7 +11,6 @@ namespace Proxy
         GenericProxyCache<string> _proxyCache = new GenericProxyCache<string>();
         public string Get(string CacheItemName)
         {
-            Console.WriteLine("Get " + CacheItemName);
             return _proxyCache.Get(CacheItemName);
         }
 
