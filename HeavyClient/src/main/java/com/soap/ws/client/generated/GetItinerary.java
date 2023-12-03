@@ -1,10 +1,8 @@
 
 package com.soap.ws.client.generated;
 
-import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -12,15 +10,17 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * <p>Classe Java pour anonymous complex type.
  * 
- * <p>Le fragment de schÈma suivant indique le contenu attendu figurant dans cette classe.
+ * <p>Le fragment de sch√©ma suivant indique le contenu attendu figurant dans cette classe.
  * 
  * <pre>
  * &lt;complexType&gt;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="start" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
- *         &lt;element name="end" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="startLatitude" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/&gt;
+ *         &lt;element name="startLongitude" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/&gt;
+ *         &lt;element name="endLatitude" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/&gt;
+ *         &lt;element name="endLongitude" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -31,63 +31,113 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "start",
-    "end"
+    "startLatitude",
+    "startLongitude",
+    "endLatitude",
+    "endLongitude"
 })
 @XmlRootElement(name = "getItinerary")
 public class GetItinerary {
 
-    @XmlElementRef(name = "start", namespace = "http://tempuri.org/", type = JAXBElement.class, required = false)
-    protected JAXBElement<String> start;
-    @XmlElementRef(name = "end", namespace = "http://tempuri.org/", type = JAXBElement.class, required = false)
-    protected JAXBElement<String> end;
+    protected Double startLatitude;
+    protected Double startLongitude;
+    protected Double endLatitude;
+    protected Double endLongitude;
 
     /**
-     * Obtient la valeur de la propriÈtÈ start.
+     * Obtient la valeur de la propri√©t√© startLatitude.
      * 
      * @return
      *     possible object is
-     *     {@link JAXBElement }{@code <}{@link String }{@code >}
+     *     {@link Double }
      *     
      */
-    public JAXBElement<String> getStart() {
-        return start;
+    public Double getStartLatitude() {
+        return startLatitude;
     }
 
     /**
-     * DÈfinit la valeur de la propriÈtÈ start.
+     * D√©finit la valeur de la propri√©t√© startLatitude.
      * 
      * @param value
      *     allowed object is
-     *     {@link JAXBElement }{@code <}{@link String }{@code >}
+     *     {@link Double }
      *     
      */
-    public void setStart(JAXBElement<String> value) {
-        this.start = value;
+    public void setStartLatitude(Double value) {
+        this.startLatitude = value;
     }
 
     /**
-     * Obtient la valeur de la propriÈtÈ end.
+     * Obtient la valeur de la propri√©t√© startLongitude.
      * 
      * @return
      *     possible object is
-     *     {@link JAXBElement }{@code <}{@link String }{@code >}
+     *     {@link Double }
      *     
      */
-    public JAXBElement<String> getEnd() {
-        return end;
+    public Double getStartLongitude() {
+        return startLongitude;
     }
 
     /**
-     * DÈfinit la valeur de la propriÈtÈ end.
+     * D√©finit la valeur de la propri√©t√© startLongitude.
      * 
      * @param value
      *     allowed object is
-     *     {@link JAXBElement }{@code <}{@link String }{@code >}
+     *     {@link Double }
      *     
      */
-    public void setEnd(JAXBElement<String> value) {
-        this.end = value;
+    public void setStartLongitude(Double value) {
+        this.startLongitude = value;
+    }
+
+    /**
+     * Obtient la valeur de la propri√©t√© endLatitude.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Double }
+     *     
+     */
+    public Double getEndLatitude() {
+        return endLatitude;
+    }
+
+    /**
+     * D√©finit la valeur de la propri√©t√© endLatitude.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Double }
+     *     
+     */
+    public void setEndLatitude(Double value) {
+        this.endLatitude = value;
+    }
+
+    /**
+     * Obtient la valeur de la propri√©t√© endLongitude.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Double }
+     *     
+     */
+    public Double getEndLongitude() {
+        return endLongitude;
+    }
+
+    /**
+     * D√©finit la valeur de la propri√©t√© endLongitude.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Double }
+     *     
+     */
+    public void setEndLongitude(Double value) {
+        this.endLongitude = value;
     }
 
 }
