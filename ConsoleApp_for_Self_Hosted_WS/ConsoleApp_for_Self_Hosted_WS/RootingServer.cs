@@ -28,26 +28,34 @@ namespace ConsoleApp_for_Rooting_Server
 
         ProxyClient proxyClient = new ProxyClient();
         
-        public async void getItinerary(string start, string end)
+        public async void getItinerary(double startLatitude, double startLongitude, double endLatitude, double endLongitude)
         {
             // etape 1: regarder le trajet de start a end a pied pour s'en servir comme base
             // appel a l'api nominatim pour trouver start et end
             string nominatimApi = "https://nominatim.openstreetmap.org";
             string jcdecauxApi = "https://api.jcdecaux.com/vls/v3";
-            string getStartLocation = "/search?q=" + start + "&format=json&polygon_kml=1&addressdetails=1";
-            string getEndLocation = "/search?q=" + end + "&format=json&polygon_kml=1&addressdetails=1";
-            string responseStart = proxyClient.Get(nominatimApi + getStartLocation);
-            string responseEnd = proxyClient.Get(nominatimApi + getEndLocation);
+            //string getStartLocation = "/search?q=" + start + "&format=json&polygon_kml=1&addressdetails=1";
+            //string getEndLocation = "/search?q=" + end + "&format=json&polygon_kml=1&addressdetails=1";
+            //string responseStart = proxyClient.Get(nominatimApi + getStartLocation);
+            //string responseEnd = proxyClient.Get(nominatimApi + getEndLocation);
 
             Console.WriteLine("Start point location:");
-            Console.WriteLine(getLocation(responseStart));
+            Console.WriteLine(startLongitude.ToString(CultureInfo.InvariantCulture) + "," + startLatitude.ToString(CultureInfo.InvariantCulture));
+            //Console.WriteLine(getLocation(responseStart));
             Console.WriteLine("End point location:");
-            Console.WriteLine(getLocation(responseEnd));
+            Console.WriteLine(endLongitude.ToString(CultureInfo.InvariantCulture) + "," + endLatitude.ToString(CultureInfo.InvariantCulture));
+            //Console.WriteLine(getLocation(responseEnd));
 
-            LocationData locationStart = LocationData(getLatitudeNominatim(responseStart), getLongitudeNominatim(responseStart));
-            LocationData locationEnd = LocationData(getLatitudeNominatim(responseEnd), getLongitudeNominatim(responseEnd));
-            string startLocation = getLocation(responseStart);
-            string endLocation = getLocation(responseEnd);
+            //LocationData locationStart = LocationData(getLatitudeNominatim(responseStart), getLongitudeNominatim(responseStart));
+            //LocationData locationEnd = LocationData(getLatitudeNominatim(responseEnd), getLongitudeNominatim(responseEnd));
+            LocationData locationStart = LocationData(startLatitude, startLongitude);
+            LocationData locationEnd = LocationData(endLatitude, endLongitude);
+
+            //string startLocation = getLocation(responseStart);
+            //string endLocation = getLocation(responseEnd);
+
+            string startLocation = locationStart.ToString();
+            string endLocation = locationEnd.ToString();
 
             Console.WriteLine("Itinerary duration (foot-walking):");
             double footDuration = getItineraryDistance(startLocation, endLocation, "foot-walking");
@@ -170,8 +178,10 @@ namespace ConsoleApp_for_Rooting_Server
 
             string itinerary = proxyClient.Get(openRouteServiceApi + uriItinerary);
             JObject itineraryJson = JObject.Parse(itinerary);
-            double duration = (double)itineraryJson["features"][0]["properties"]["summary"]["duration"];
-            return duration;
+            double? duration = (double?)itineraryJson["features"][0]["properties"]["summary"]["duration"];
+            if (duration == null)
+                return -1;
+            return (double)duration;
         }
 
         private Station getClosestStation(LocationData location, List<Station> stations, int nbOfFreeBikes, int nbOfFreeStand)
