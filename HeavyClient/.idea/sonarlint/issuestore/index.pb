@@ -9,3 +9,17 @@ l
 <src/main/java/main/sample3_interaction/SelectionPainter.java,1/e/1ed8fba817db6ab582e04f0084e83aaf3104f316
 e
 5src/main/java/main/sample3_interaction/Itinerary.java,6/b/6bef856bff0c3955207881eb12e70404f9124031
+g
+7src/main/java/itineraire/sample2_waypoints/Sample2.java,6/8/68de46488f8e9cc60baab85ae226e108c3dd6adf
+‘
+asrc/main/java/itineraire/sample2_waypoints/ors__v2_directions_{profile}_get_1701674593035.geojson,e/d/ed7a0bebd4b38598a29dd53150767d103fe2a8fb
+j
+:src/main/java/itineraire/sample2_waypoints/itineraire.json,3/d/3d9ce2f6c8bd48846bb82eec3ad4bab78e08c337
+l
+<src/main/java/itineraire/sample2_waypoints/RoutePainter.java,3/e/3e909a2b8ddad9f32815948f3e3ba01547849b9c
+g
+7src/main/java/itineraire/sample2_waypoints/Itinary.java,8/3/831391ce41b357c4cf241c2c11cec0b522ddbf22
+‘
+asrc/main/java/itineraire/sample2_waypoints/ors__v2_directions_{profile}_get_1701685823309.geojson,c/a/cadb42d7dfabcd5ad17509186a77357c36813022
+d
+4src/main/java/itineraire/sample2_waypoints/Step.java,2/a/2a72402ae6406c03b6fe37c26045fcec02262553
