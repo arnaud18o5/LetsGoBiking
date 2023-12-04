@@ -3,6 +3,7 @@ package com.soap.ws.client.generated;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
+import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.RequestWrapper;
@@ -28,11 +29,14 @@ public interface IRootingServer {
      * @param endLongitude
      * @param startLongitude
      * @param endLatitude
+     * @return
+     *     returns com.soap.ws.client.generated.ArrayOfItinerary
      */
-    @WebMethod(action = "http://tempuri.org/IRootingServer/getItinerary")
-    @RequestWrapper(localName = "getItinerary", targetNamespace = "http://tempuri.org/", className = "com.soap.ws.client.generated.GetItinerary")
-    @ResponseWrapper(localName = "getItineraryResponse", targetNamespace = "http://tempuri.org/", className = "com.soap.ws.client.generated.GetItineraryResponse")
-    public void getItinerary(
+    @WebMethod(operationName = "GetItinerary", action = "http://tempuri.org/IRootingServer/GetItinerary")
+    @WebResult(name = "GetItineraryResult", targetNamespace = "http://tempuri.org/")
+    @RequestWrapper(localName = "GetItinerary", targetNamespace = "http://tempuri.org/", className = "com.soap.ws.client.generated.GetItinerary")
+    @ResponseWrapper(localName = "GetItineraryResponse", targetNamespace = "http://tempuri.org/", className = "com.soap.ws.client.generated.GetItineraryResponse")
+    public ArrayOfItinerary getItinerary(
         @WebParam(name = "startLatitude", targetNamespace = "http://tempuri.org/")
         Double startLatitude,
         @WebParam(name = "startLongitude", targetNamespace = "http://tempuri.org/")

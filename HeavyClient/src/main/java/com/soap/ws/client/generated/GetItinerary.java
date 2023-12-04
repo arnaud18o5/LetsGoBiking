@@ -3,6 +3,7 @@ package com.soap.ws.client.generated;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -36,12 +37,16 @@ import javax.xml.bind.annotation.XmlType;
     "endLatitude",
     "endLongitude"
 })
-@XmlRootElement(name = "getItinerary")
+@XmlRootElement(name = "GetItinerary", namespace = "http://tempuri.org/")
 public class GetItinerary {
 
+    @XmlElement(namespace = "http://tempuri.org/")
     protected Double startLatitude;
+    @XmlElement(namespace = "http://tempuri.org/")
     protected Double startLongitude;
+    @XmlElement(namespace = "http://tempuri.org/")
     protected Double endLatitude;
+    @XmlElement(namespace = "http://tempuri.org/")
     protected Double endLongitude;
 
     /**

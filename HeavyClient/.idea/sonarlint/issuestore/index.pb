@@ -23,3 +23,7 @@ g
 asrc/main/java/itineraire/sample2_waypoints/ors__v2_directions_{profile}_get_1701685823309.geojson,c/a/cadb42d7dfabcd5ad17509186a77357c36813022
 d
 4src/main/java/itineraire/sample2_waypoints/Step.java,2/a/2a72402ae6406c03b6fe37c26045fcec02262553
+i
+9src/main/java/com/soap/ws/client/generated/Itinerary.java,8/5/85f336c16831db3a3c4cdef1b941b8822985767a
+p
+@src/main/java/com/soap/ws/client/generated/ArrayOfItinerary.java,5/2/52433689ccb119cf823b8ee29e84c77e424353cd

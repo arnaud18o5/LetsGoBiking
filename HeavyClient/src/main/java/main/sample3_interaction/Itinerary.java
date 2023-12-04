@@ -1,5 +1,6 @@
 package main.sample3_interaction;
 
+import com.soap.ws.client.generated.ArrayOfItinerary;
 import com.soap.ws.client.generated.RootingServer;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -40,6 +41,7 @@ public class Itinerary {
 
     public void askForItinerary() {
         RootingServer rootingServer = new RootingServer();
-        rootingServer.getBasicHttpBindingIRootingServer().getItinerary(start.getLatitude(), start.getLongitude(), end.getLatitude(), end.getLongitude());
+        ArrayOfItinerary itinaries = rootingServer.getBasicHttpBindingIRootingServer().getItinerary(start.getLatitude(), start.getLongitude(), end.getLatitude(), end.getLongitude());
+        System.out.println("test");
     }
 }

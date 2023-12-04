@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.2
  * 
  */
-@WebServiceClient(name = "RootingServer", targetNamespace = "http://tempuri.org/", wsdlLocation = "http://192.168.1.52:8090/RootingServer?wsdl")
+@WebServiceClient(name = "RootingServer", targetNamespace = "http://tempuri.org/", wsdlLocation = "http://10.212.119.181:8090/RootingServer?wsdl")
 public class RootingServer
     extends Service
 {
@@ -30,7 +30,7 @@ public class RootingServer
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("http://192.168.1.52:8090/RootingServer?wsdl");
+            url = new URL("http://10.212.119.181:8090/RootingServer?wsdl");
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }
