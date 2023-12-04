@@ -14,7 +14,7 @@ namespace Proxy
         static void Main(string[] args)
         {
             // Create a URI to serve as the base address
-            Uri httpUrl = new Uri("http://192.168.1.52:8091/ProxyCache");
+            Uri httpUrl = new Uri("http://10.212.119.181:8091/ProxyCache");
 
             // Create ServiceHost
             ServiceHost host = new ServiceHost(typeof(Proxy), httpUrl);

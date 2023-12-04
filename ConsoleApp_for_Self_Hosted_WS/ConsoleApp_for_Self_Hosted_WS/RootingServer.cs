@@ -10,6 +10,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection.Emit;
+using System.Runtime.Serialization;
 using System.Security.Cryptography.X509Certificates;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
@@ -28,12 +29,14 @@ namespace ConsoleApp_for_Rooting_Server
 
         ProxyClient proxyClient = new ProxyClient();
         
-        public async void getItinerary(double startLatitude, double startLongitude, double endLatitude, double endLongitude)
+        public async Task<List<Itinerary>> GetItinerary(double startLatitude, double startLongitude, double endLatitude, double endLongitude)
         {
             // etape 1: regarder le trajet de start a end a pied pour s'en servir comme base
             // appel a l'api nominatim pour trouver start et end
             string nominatimApi = "https://nominatim.openstreetmap.org";
             string jcdecauxApi = "https://api.jcdecaux.com/vls/v3";
+
+            List<Itinerary> itineraries = new List<Itinerary>();
             //string getStartLocation = "/search?q=" + start + "&format=json&polygon_kml=1&addressdetails=1";
             //string getEndLocation = "/search?q=" + end + "&format=json&polygon_kml=1&addressdetails=1";
             //string responseStart = proxyClient.Get(nominatimApi + getStartLocation);
@@ -80,7 +83,8 @@ namespace ConsoleApp_for_Rooting_Server
             if (!StationsAreInTheSameContract(startStation, endStation))
             {
                 Console.WriteLine("That's going to be tough.");
-                return;
+                itineraries.Add(getItinerary(startLocation, endLocation, "foot-walking"));
+                return itineraries;
             }
 
             double distanceStationToStation = getItineraryDistance(startStation.ToString(), endStation.ToString(), "cycling-regular");
@@ -104,11 +108,17 @@ namespace ConsoleApp_for_Rooting_Server
             if (footDuration < distanceStartToStation + distanceStationToStation + distanceStationToEnd + 120) // we add 2 minutes to the itinerary to take the bike
             {
                 Console.WriteLine("No");
+                itineraries.Add(getItinerary(startLocation, endLocation, "foot-walking"));
             }
             else
             {
                 Console.WriteLine("Yes");
-            }   
+                itineraries.Add(getItinerary(startLocation, startStation.ToString(), "foot-walking"));
+                itineraries.Add(getItinerary(startStation.ToString(), endStation.ToString(), "cycling-regular"));
+                itineraries.Add(getItinerary(endStation.ToString(), endLocation, "foot-walking"));
+            }
+            return itineraries;
+
             /*
              * la on a les 2 stations les plus proches de start et end
              * maintenant il faut faire la logique pour trouver le meilleur trajet entre directement a pied ou en prenant un velo
@@ -177,11 +187,23 @@ namespace ConsoleApp_for_Rooting_Server
             string uriItinerary = "/directions/" + profile + "?api_key=5b3ce3597851110001cf624833fd1c84c80546dbbd1400fe7eb552e3&start=" + startLocation + "&end=" + endLocation;
 
             string itinerary = proxyClient.Get(openRouteServiceApi + uriItinerary);
+            Itinerary Itinerary = JsonConvert.DeserializeObject<Itinerary>(itinerary);
+
             JObject itineraryJson = JObject.Parse(itinerary);
             double? duration = (double?)itineraryJson["features"][0]["properties"]["summary"]["duration"];
             if (duration == null)
                 return -1;
             return (double)duration;
+        }
+
+        private Itinerary getItinerary(string startLocation, string endLocation, string profile)
+        {
+            string openRouteServiceApi = "https://api.openrouteservice.org/v2";
+            string uriItinerary = "/directions/" + profile + "?api_key=5b3ce3597851110001cf624833fd1c84c80546dbbd1400fe7eb552e3&start=" + startLocation + "&end=" + endLocation;
+
+            string itinerary = proxyClient.Get(openRouteServiceApi + uriItinerary);
+            Itinerary Itinerary = JsonConvert.DeserializeObject<Itinerary>(itinerary);
+            return Itinerary;
         }
 
         private Station getClosestStation(LocationData location, List<Station> stations, int nbOfFreeBikes, int nbOfFreeStand)
@@ -222,9 +244,9 @@ namespace ConsoleApp_for_Rooting_Server
             
         }
 
-        public void test()
+        public Task<List<Itinerary>> getItinerary(double startLatitude, double startLongitude, double endLatitude, double endLongitude)
         {
-            Console.WriteLine("test");
+            throw new NotImplementedException();
         }
     }
 
@@ -242,6 +264,88 @@ namespace ConsoleApp_for_Rooting_Server
         {
             return longitude.ToString(CultureInfo.InvariantCulture) + "," + latitude.ToString(CultureInfo.InvariantCulture);
         }
+    }
+
+    [DataContract]
+    public class Step
+    {
+        public double Distance { get; set; }
+        public double Duration { get; set; }
+        public int Type { get; set; }
+        public string Instruction { get; set; }
+        public string Name { get; set; }
+        public List<int> WayPoints { get; set; }
+        public int? ExitNumber { get; set; }
+    }
+
+    [DataContract]
+    public class Segment
+    {
+        public double Distance { get; set; }
+        public double Duration { get; set; }
+        public List<Step> Steps { get; set; }
+    }
+
+    [DataContract]
+    public class Summary
+    {
+        public double Distance { get; set; }
+        public double Duration { get; set; }
+    }
+
+    [DataContract]
+
+    public class Properties
+    {
+        public int Transfers { get; set; }
+        public int Fare { get; set; }
+        [DataMember]
+        public List<Segment> Segments { get; set; }
+        [DataMember]
+        public List<int> WayPoints { get; set; }
+        public Summary Summary { get; set; }
+    }
+
+    [DataContract]
+
+    public class Geometry
+    {
+        [DataMember]
+        public List<List<double>> Coordinates { get; set; }
+        public string Type { get; set; }
+    }
+
+    [DataContract]
+    public class Feature
+    {
+        public List<double> Bbox { get; set; }
+        public string Type { get; set; }
+        [DataMember]
+        public Properties Properties { get; set; }
+        [DataMember]
+        public Geometry Geometry { get; set; }
+    }
+
+    [DataContract]
+    public class RouteResponse
+    {
+        public string Type { get; set; }
+        [DataMember]
+        public Dictionary<string, object> Metadata { get; set; }
+        public List<double> Bbox { get; set; }
+        [DataMember]
+        public List<Feature> Features { get; set; }
+    }
+
+    [DataContract]
+    public class Itinerary
+    {
+        public string Type { get; set; }
+        [DataMember]
+        public Dictionary<string, object> Metadata { get; set; }
+        public List<double> Bbox { get; set; }
+        [DataMember]
+        public List<Feature> Features { get; set; }
     }
 
     public class  Availabilities 
@@ -284,9 +388,5 @@ namespace ConsoleApp_for_Rooting_Server
 
     }
 
-    public class Itinerary
-    {
-        //a definir selon le type de carte dans le client
-    }
 
 }

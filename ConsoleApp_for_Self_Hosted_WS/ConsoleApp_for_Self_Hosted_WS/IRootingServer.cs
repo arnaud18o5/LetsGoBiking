@@ -13,7 +13,7 @@ namespace ConsoleApp_for_Rooting_Server
     public interface IRootingServer
     {
         [OperationContract()]
-        void getItinerary(double startLatitude, double startLongitude, double endLatitude, double endLongitude);
+        Task<List<Itinerary>> GetItinerary(double startLatitude, double startLongitude, double endLatitude, double endLongitude);
     }
 
 
