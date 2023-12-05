@@ -229,13 +229,12 @@ public class SelectionAdapter extends MouseAdapter
             iSteps = 0;
         }
         if (iItinerary >= itinaries.size()) {
+            iItinerary = 0;
+            iSteps=0;
             return;
         }
 
         iSteps++;
-        if (iItinerary == itinaries.size()) {
-            return;
-        }
         for (int i = itinaries.get(iItinerary).getSteps().get(iSteps - 1).getWaypoints()[0]; i < itinaries.get(iItinerary).getSteps().get(iSteps - 1).getWaypoints()[1]; i++) {
             itinaries.get(iItinerary).getTrack().remove(0);
         }

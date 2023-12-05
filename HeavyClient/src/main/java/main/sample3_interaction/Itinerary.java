@@ -2,6 +2,7 @@ package main.sample3_interaction;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.soap.ws.client.generated.RootingServer;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.io.IOException;

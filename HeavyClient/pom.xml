@@ -56,7 +56,7 @@
                 </executions>
                 <configuration>
                     <wsdlUrls>
-                        <wsdlUrl>http://10.212.119.181:8090/RootingServer?wsdl</wsdlUrl>
+                        <wsdlUrl>http://localhost:8090/RootingServer?wsdl</wsdlUrl>
                     </wsdlUrls>
                     <keep>true</keep>
                     <packageName>com.soap.ws.client.generated</packageName>
