@@ -63,6 +63,7 @@
                     <sourceDestDir>src/main/java</sourceDestDir>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
 </project>
