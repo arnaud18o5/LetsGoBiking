@@ -50,38 +50,8 @@ public class Itinary {
         return this.steps;
     }
 
-    public void nextStep(Step step){
-        for(int i = step.getWaypoints()[0]; i < step.getWaypoints()[1]; i++){
-            this.track.set(i, null);
-        }
-        //this.steps.remove(step);
 
-    }
 
-    public Step getStepByInstruction(String instruction){
-        for(Step step : this.steps){
-            if(step.getInstruction().equals(instruction)){
-                return step;
-            }
-        }
-        return null;
-    }
 
-    public Step getNextStep(String instruction){
-        for(Step step : this.steps){
-            if(step.getInstruction().equals(instruction)){
-                return this.steps.get(this.steps.indexOf(step) + 1);
-            }
-        }
-        return null;
-    }
-
-    public Itinary removeFromTrack(Step step){
-        for(int i = step.getWaypoints()[0]; i < step.getWaypoints()[1]; i++){
-            this.track.remove(i);
-        }
-        this.steps.remove(step);
-        return this;
-    }
 
 }

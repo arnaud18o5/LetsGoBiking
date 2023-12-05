@@ -46,7 +46,14 @@ public class Itinerary {
     public JsonNode askForItinerary() throws IOException {
         RootingServer rootingServer = new RootingServer();
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode node = objectMapper.readTree(new StringReader( rootingServer.getBasicHttpBindingIRootingServer().getItinerary(start.getLatitude(), start.getLongitude(), end.getLatitude(), end.getLongitude())));
+        String response =  "";
+        try{
+            response = rootingServer.getBasicHttpBindingIRootingServer().getItinerary(start.getLatitude(), start.getLongitude(), end.getLatitude(), end.getLongitude());
+        } catch(Exception e){
+            return null;
+        }
+        System.out.println(response);
+        JsonNode node = objectMapper.readTree(new StringReader(response));
         System.out.print(node);
         return node;
     }

@@ -29,7 +29,7 @@ import org.jxmapviewer.viewer.*;
 public class SelectionAdapter extends MouseAdapter 
 {
 
-    private Itinerary itinerary;
+    private static Itinerary itinerary;
     private boolean dragging;
     private JXMapViewer viewer;
 
@@ -39,7 +39,7 @@ public class SelectionAdapter extends MouseAdapter
     private Point2D startPos = new Point2D.Double();
     private Point2D endPos = new Point2D.Double();
 
-    private Set<Waypoint> waypoints = new HashSet<Waypoint>();
+    private static Set<Waypoint> waypoints = new HashSet<Waypoint>();
 
     private static List<Itinary> itinaries = new ArrayList<>();
 
@@ -126,9 +126,11 @@ public class SelectionAdapter extends MouseAdapter
 
         // Mettre à jour les marqueurs sur la carte
         updateMapMarkers(viewer, waypoints);
-        if(waypoints.size() == 2) {
+        /*if(waypoints.size() == 2) {
             try {
                 JsonNode jsonNode = itinerary.askForItinerary();
+                if(jsonNode == null)
+                    return;
                 List<Itinary> itinaries = getItinaries(jsonNode.toString());
 
                 updateData(viewer, itinaries);
@@ -141,6 +143,31 @@ public class SelectionAdapter extends MouseAdapter
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
+        }*/
+    }
+
+
+    public static String searchItinerary(JXMapViewer mapViewer){
+        if(waypoints.size() == 2) {
+            try {
+                JsonNode jsonNode = itinerary.askForItinerary();
+                if(jsonNode == null)
+                    return "Impossible itinerary ! Choose other points.";
+                List<Itinary> itinaries = getItinaries(jsonNode.toString());
+
+                updateData(mapViewer, itinaries);
+                List<GeoPosition> track = new ArrayList<>();
+                for (Itinary itinary : itinaries) {
+                    track.addAll(itinary.getTrack());
+                }
+                mapViewer.zoomToBestFit(new HashSet<GeoPosition>(track), 0.7);
+                return itinaries.get(0).getSteps().get(0).getInstruction();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+        else{
+            return "You need a start location and an end location to search an itinerary.";
         }
     }
 
@@ -150,23 +177,11 @@ public class SelectionAdapter extends MouseAdapter
         mapViewer.setOverlayPainter(waypointPainter);
     }
 
-    private static void updateItinerary(JXMapViewer mapViewer, JsonNode itineraries){
-    }
-
-    /*public static void updateData(int iStep, int iItinerary) throws IOException {
-        if (iItinerary == itinaries.size()) {
-            return;
-        }
-        for (int i = itinaries.get(iItinerary).getSteps().get(iStep - 1).getWaypoints()[0]; i < itinaries.get(iItinerary).getSteps().get(iStep - 1).getWaypoints()[1]; i++) {
-            itinaries.get(iItinerary).getTrack().remove(0);
-        }
-        updateData(mapViewer, itinaries);
-    }*/
-
 
 
     public static java.util.List<Itinary> getItinaries(String response) throws IOException {
         // Créez un ObjectMapper (Jackson) pour lire le fichier JSON
+        System.out.println(response);
         ObjectMapper objectMapper = new ObjectMapper();
         java.util.List<Itinary> iti = new ArrayList<>();
         // Utilisez l'ObjectMapper pour lire le fichier JSON en tant qu'objet JsonNode

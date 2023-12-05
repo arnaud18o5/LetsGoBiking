@@ -1,16 +1,12 @@
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.persistence.criteria.Selection;
 import javax.swing.*;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import itineraire.sample2_waypoints.Itinary;
 import itineraire.sample2_waypoints.RoutePainter;
 import main.sample3_interaction.SelectionAdapter;
@@ -51,6 +47,7 @@ public class Main {
         // Display the viewer in a JFrame
         JFrame frame = new JFrame("JXMapviewer2 Example 2");
         JButton button = new JButton("Next");
+        JButton search = new JButton("Search Itinerary");
         JLabel label = new JLabel("Select a starting point and an ending point by clicking on the map.");
         Boolean over = false;
         AtomicInteger iStep = new AtomicInteger();
@@ -58,7 +55,12 @@ public class Main {
         frame.getContentPane().add(mapViewer);
         frame.setSize(800, 600);
 
-        frame.add(button, BorderLayout.SOUTH);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(button);
+        buttonPanel.add(search);
+
+        frame.add(buttonPanel, BorderLayout.SOUTH);
+
         frame.add(label, BorderLayout.NORTH);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
@@ -80,7 +82,6 @@ public class Main {
         // Set the focus
         mapViewer.setZoom(7);
         mapViewer.setAddressLocation(toulouse);
-        //mapViewer.zoomToBestFit(new HashSet<GeoPosition>(track), 0.7);
 
         // Add interactions
         MouseInputListener mia = new PanMouseInputListener(mapViewer);
@@ -107,6 +108,12 @@ public class Main {
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
+        });
+
+
+        search.addActionListener(e -> {
+            label.setText("Searching best itinerary...");
+            label.setText(SelectionAdapter.searchItinerary(mapViewer));
         });
 
         mapViewer.addPropertyChangeListener("zoom", new PropertyChangeListener()
