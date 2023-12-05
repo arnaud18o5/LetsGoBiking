@@ -1,7 +1,12 @@
 package main.sample3_interaction;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soap.ws.client.generated.RootingServer;
 import org.jxmapviewer.viewer.GeoPosition;
+
+import java.io.IOException;
+import java.io.StringReader;
 
 public class Itinerary {
     private GeoPosition start;
@@ -38,8 +43,11 @@ public class Itinerary {
         this.start = start;
     }
 
-    public void askForItinerary() {
+    public JsonNode askForItinerary() throws IOException {
         RootingServer rootingServer = new RootingServer();
-        rootingServer.getBasicHttpBindingIRootingServer().getItinerary(start.getLatitude(), start.getLongitude(), end.getLatitude(), end.getLongitude());
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode node = objectMapper.readTree(new StringReader( rootingServer.getBasicHttpBindingIRootingServer().getItinerary(start.getLatitude(), start.getLongitude(), end.getLatitude(), end.getLongitude())));
+        System.out.print(node);
+        return node;
     }
 }

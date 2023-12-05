@@ -32,15 +32,15 @@
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
             <version>1.2</version>
-        </dependency>
+        </dependency><!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.13.0</version> <!-- Utilisez la version la plus récente -->
+            <version>2.16.0</version>
         </dependency>
+
     </dependencies>
     <build>
-<!--
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -56,7 +56,7 @@
                 </executions>
                 <configuration>
                     <wsdlUrls>
-                        <wsdlUrl>http://192.168.1.52:8090/RootingServer?wsdl</wsdlUrl>
+                        <wsdlUrl>http://10.212.119.181:8090/RootingServer?wsdl</wsdlUrl>
                     </wsdlUrls>
                     <keep>true</keep>
                     <packageName>com.soap.ws.client.generated</packageName>
@@ -64,6 +64,5 @@
                 </configuration>
             </plugin>
         </plugins>
-        -->
     </build>
 </project>

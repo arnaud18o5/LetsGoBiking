@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlType;
     "endLatitude",
     "endLongitude"
 })
-@XmlRootElement(name = "getItinerary")
+@XmlRootElement(name = "GetItinerary")
 public class GetItinerary {
 
     protected Double startLatitude;

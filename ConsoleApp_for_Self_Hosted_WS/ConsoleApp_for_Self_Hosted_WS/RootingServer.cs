@@ -29,14 +29,15 @@ namespace ConsoleApp_for_Rooting_Server
 
         ProxyClient proxyClient = new ProxyClient();
         
-        public async Task<List<Itinerary>> GetItinerary(double startLatitude, double startLongitude, double endLatitude, double endLongitude)
+        public async Task<String> GetItinerary(double startLatitude, double startLongitude, double endLatitude, double endLongitude)
         {
             // etape 1: regarder le trajet de start a end a pied pour s'en servir comme base
             // appel a l'api nominatim pour trouver start et end
             string nominatimApi = "https://nominatim.openstreetmap.org";
             string jcdecauxApi = "https://api.jcdecaux.com/vls/v3";
 
-            List<Itinerary> itineraries = new List<Itinerary>();
+            //List<Itinerary> itineraries = new List<Itinerary>();
+            String itineraries;
             //string getStartLocation = "/search?q=" + start + "&format=json&polygon_kml=1&addressdetails=1";
             //string getEndLocation = "/search?q=" + end + "&format=json&polygon_kml=1&addressdetails=1";
             //string responseStart = proxyClient.Get(nominatimApi + getStartLocation);
@@ -83,8 +84,7 @@ namespace ConsoleApp_for_Rooting_Server
             if (!StationsAreInTheSameContract(startStation, endStation))
             {
                 Console.WriteLine("That's going to be tough.");
-                itineraries.Add(getItinerary(startLocation, endLocation, "foot-walking"));
-                return itineraries;
+                return "[" + getItinerary(startLocation, endLocation, "foot-walking") + "]";
             }
 
             double distanceStationToStation = getItineraryDistance(startStation.ToString(), endStation.ToString(), "cycling-regular");
@@ -108,15 +108,17 @@ namespace ConsoleApp_for_Rooting_Server
             if (footDuration < distanceStartToStation + distanceStationToStation + distanceStationToEnd + 120) // we add 2 minutes to the itinerary to take the bike
             {
                 Console.WriteLine("No");
-                itineraries.Add(getItinerary(startLocation, endLocation, "foot-walking"));
+                itineraries = "[" +getItinerary(startLocation, endLocation, "foot-walking") + "]";
             }
             else
             {
                 Console.WriteLine("Yes");
-                itineraries.Add(getItinerary(startLocation, startStation.ToString(), "foot-walking"));
-                itineraries.Add(getItinerary(startStation.ToString(), endStation.ToString(), "cycling-regular"));
-                itineraries.Add(getItinerary(endStation.ToString(), endLocation, "foot-walking"));
+                itineraries = "[" + getItinerary(startLocation, startStation.ToString(), "foot-walking") + ","
+                    + getItinerary(startStation.ToString(), endStation.ToString(), "cycling-regular") + ","
+                    + getItinerary(endStation.ToString(), endLocation, "foot-walking") + "]";
             }
+
+            // parse itinaries to json
             return itineraries;
 
             /*
@@ -196,14 +198,12 @@ namespace ConsoleApp_for_Rooting_Server
             return (double)duration;
         }
 
-        private Itinerary getItinerary(string startLocation, string endLocation, string profile)
+        private String getItinerary(string startLocation, string endLocation, string profile)
         {
             string openRouteServiceApi = "https://api.openrouteservice.org/v2";
             string uriItinerary = "/directions/" + profile + "?api_key=5b3ce3597851110001cf624833fd1c84c80546dbbd1400fe7eb552e3&start=" + startLocation + "&end=" + endLocation;
 
-            string itinerary = proxyClient.Get(openRouteServiceApi + uriItinerary);
-            Itinerary Itinerary = JsonConvert.DeserializeObject<Itinerary>(itinerary);
-            return Itinerary;
+            return proxyClient.Get(openRouteServiceApi + uriItinerary);
         }
 
         private Station getClosestStation(LocationData location, List<Station> stations, int nbOfFreeBikes, int nbOfFreeStand)
@@ -269,13 +269,12 @@ namespace ConsoleApp_for_Rooting_Server
     [DataContract]
     public class Step
     {
-        public double Distance { get; set; }
-        public double Duration { get; set; }
-        public int Type { get; set; }
-        public string Instruction { get; set; }
+        //public double Distance { get; set; }
+        //public double Duration { get; set; }
+        //public int Type { get; set; }
+        //public string Instruction { get; set; }
         public string Name { get; set; }
-        public List<int> WayPoints { get; set; }
-        public int? ExitNumber { get; set; }
+        //public List<int> WayPoints { get; set; }
     }
 
     [DataContract]

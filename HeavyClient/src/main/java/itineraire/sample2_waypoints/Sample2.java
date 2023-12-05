@@ -3,6 +3,7 @@ package itineraire.sample2_waypoints;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -60,7 +61,7 @@ public class Sample2
         TileFactoryInfo info = new OSMTileFactoryInfo();
         DefaultTileFactory tileFactory = new DefaultTileFactory(info);
         mapViewer.setTileFactory(tileFactory);
-        itinaries = getItinaries();
+        //itinaries = getItinaries();
         updateData(mapViewer, itinaries);
         List<GeoPosition> track = new ArrayList<>();
         for (Itinary itinary : itinaries) {
@@ -154,15 +155,12 @@ public class Sample2
         updateData(mapViewer, itinaries);
     }*/
 
-    public static List<Itinary> getItinaries() throws IOException {
+    public static List<Itinary> getItinaries(String response) throws IOException {
         // Créez un ObjectMapper (Jackson) pour lire le fichier JSON
         ObjectMapper objectMapper = new ObjectMapper();
         List<Itinary> itinaries = new ArrayList<>();
-        // Spécifiez le chemin du fichier JSON local
-        String filePath = "src/main/java/itineraire/sample2_waypoints/itineraire.json";
-
         // Utilisez l'ObjectMapper pour lire le fichier JSON en tant qu'objet JsonNode
-        JsonNode jsonNode = objectMapper.readTree(new File(filePath));
+        JsonNode jsonNode = objectMapper.readTree(new StringReader(response));
         for (JsonNode element : jsonNode) {
             JsonNode name = element.get("features").get(0).get("geometry").get("coordinates");
             itinaries.add(new Itinary(element));

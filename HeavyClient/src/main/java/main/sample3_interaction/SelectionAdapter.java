@@ -5,10 +5,20 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import itineraire.sample2_waypoints.Itinary;
+import itineraire.sample2_waypoints.RoutePainter;
 import org.jxmapviewer.JXMapViewer;
+import org.jxmapviewer.painter.CompoundPainter;
+import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.*;
 
 /**
@@ -23,10 +33,15 @@ public class SelectionAdapter extends MouseAdapter
     private boolean dragging;
     private JXMapViewer viewer;
 
+    private static int iItinerary = 0;
+
+    private static int iSteps = 0;
     private Point2D startPos = new Point2D.Double();
     private Point2D endPos = new Point2D.Double();
 
     private Set<Waypoint> waypoints = new HashSet<Waypoint>();
+
+    private static List<Itinary> itinaries = new ArrayList<>();
 
     /**
      * @param viewer the jxmapviewer
@@ -112,7 +127,20 @@ public class SelectionAdapter extends MouseAdapter
         // Mettre à jour les marqueurs sur la carte
         updateMapMarkers(viewer, waypoints);
         if(waypoints.size() == 2) {
-            itinerary.askForItinerary();
+            try {
+                JsonNode jsonNode = itinerary.askForItinerary();
+                List<Itinary> itinaries = getItinaries(jsonNode.toString());
+
+                updateData(viewer, itinaries);
+                List<GeoPosition> track = new ArrayList<>();
+                for (Itinary itinary : itinaries) {
+                    track.addAll(itinary.getTrack());
+                }
+                viewer.zoomToBestFit(new HashSet<GeoPosition>(track), 0.7);
+
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 
@@ -120,5 +148,97 @@ public class SelectionAdapter extends MouseAdapter
         WaypointPainter<Waypoint> waypointPainter = new WaypointPainter<>();
         waypointPainter.setWaypoints(waypoints);
         mapViewer.setOverlayPainter(waypointPainter);
+    }
+
+    private static void updateItinerary(JXMapViewer mapViewer, JsonNode itineraries){
+    }
+
+    /*public static void updateData(int iStep, int iItinerary) throws IOException {
+        if (iItinerary == itinaries.size()) {
+            return;
+        }
+        for (int i = itinaries.get(iItinerary).getSteps().get(iStep - 1).getWaypoints()[0]; i < itinaries.get(iItinerary).getSteps().get(iStep - 1).getWaypoints()[1]; i++) {
+            itinaries.get(iItinerary).getTrack().remove(0);
+        }
+        updateData(mapViewer, itinaries);
+    }*/
+
+
+
+    public static java.util.List<Itinary> getItinaries(String response) throws IOException {
+        // Créez un ObjectMapper (Jackson) pour lire le fichier JSON
+        ObjectMapper objectMapper = new ObjectMapper();
+        java.util.List<Itinary> iti = new ArrayList<>();
+        // Utilisez l'ObjectMapper pour lire le fichier JSON en tant qu'objet JsonNode
+        JsonNode jsonNode = objectMapper.readTree(new StringReader(response));
+        for (JsonNode element : jsonNode) {
+            JsonNode name = element.get("features").get(0).get("geometry").get("coordinates");
+            iti.add(new Itinary(element));
+
+        }
+        itinaries = iti;
+        return iti;
+    }
+
+    public static void updateData(JXMapViewer mapViewer, java.util.List<Itinary> itinaries) throws IOException {
+        java.util.List<RoutePainter> routePainters = new ArrayList<RoutePainter>();
+
+
+        // Exemple : Accédez à un champ spécifique dans le fichier JSON
+        //JsonNode name = jsonNode.get(0).get("features" ).get(0).get("geometry").get("coordinates");
+        java.util.List<Painter<JXMapViewer>> painters = new ArrayList<Painter<JXMapViewer>>();
+        WaypointPainter<Waypoint> waypointPainter = new WaypointPainter<Waypoint>();
+        Set<Waypoint> waypoints = new HashSet<Waypoint>();
+
+        for (Itinary itinary : itinaries) {
+            List<GeoPosition> track = itinary.getTrack();
+
+
+
+            RoutePainter routePainter = new RoutePainter(track, itinary.getProfile());
+            // Set the focus
+            //mapViewer.zoomToBestFit(new HashSet<GeoPosition>(track), 0.7);
+
+            waypoints.add(new DefaultWaypoint(itinary.getStart()));
+            waypoints.add(new DefaultWaypoint(itinary.getEnd()));
+
+
+            // Create a waypoint painter that takes all the waypoints
+            waypointPainter.setWaypoints(waypoints);
+
+            // Create a compound painter that uses both the route-painter and the waypoint-painter
+            painters.add(routePainter);
+            painters.add(waypointPainter);
+
+
+        }
+
+        waypointPainter.setWaypoints(waypoints);
+        painters.add(waypointPainter);
+        CompoundPainter<JXMapViewer> painter = new CompoundPainter<JXMapViewer>(painters);
+        mapViewer.setOverlayPainter(painter);
+
+    }
+
+    public static void updateData(JXMapViewer mapViewer) throws IOException {
+        if (iItinerary >= itinaries.size()) {
+            return;
+        }
+        if (iSteps >= itinaries.get(iItinerary).getSteps().size() - 1) {
+            iItinerary++;
+            iSteps = 0;
+        }
+        if (iItinerary >= itinaries.size()) {
+            return;
+        }
+
+        iSteps++;
+        if (iItinerary == itinaries.size()) {
+            return;
+        }
+        for (int i = itinaries.get(iItinerary).getSteps().get(iSteps - 1).getWaypoints()[0]; i < itinaries.get(iItinerary).getSteps().get(iSteps - 1).getWaypoints()[1]; i++) {
+            itinaries.get(iItinerary).getTrack().remove(0);
+        }
+        updateData(mapViewer, itinaries);
     }
 }
