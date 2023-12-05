@@ -220,9 +220,9 @@ public class SelectionAdapter extends MouseAdapter
 
     }
 
-    public static void updateData(JXMapViewer mapViewer) throws IOException {
+    public static String updateData(JXMapViewer mapViewer) throws IOException {
         if (iItinerary >= itinaries.size()) {
-            return;
+            return "You are arrived!";
         }
         if (iSteps >= itinaries.get(iItinerary).getSteps().size() - 1) {
             iItinerary++;
@@ -231,7 +231,7 @@ public class SelectionAdapter extends MouseAdapter
         if (iItinerary >= itinaries.size()) {
             iItinerary = 0;
             iSteps=0;
-            return;
+            return "You are arrived!";
         }
 
         iSteps++;
@@ -239,5 +239,6 @@ public class SelectionAdapter extends MouseAdapter
             itinaries.get(iItinerary).getTrack().remove(0);
         }
         updateData(mapViewer, itinaries);
+        return itinaries.get(iItinerary).getSteps().get(iSteps).getInstruction();
     }
 }

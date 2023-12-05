@@ -51,13 +51,13 @@ public class Main {
         // Display the viewer in a JFrame
         JFrame frame = new JFrame("JXMapviewer2 Example 2");
         JButton button = new JButton("Next");
-        JLabel label = new JLabel("texteee");
+        JLabel label = new JLabel("Select a starting point and an ending point by clicking on the map.");
         Boolean over = false;
         AtomicInteger iStep = new AtomicInteger();
         AtomicInteger iItinary = new AtomicInteger();
         frame.getContentPane().add(mapViewer);
         frame.setSize(800, 600);
-        String text = "Use left mouse button to pan, mouse wheel to zoom and right mouse to select";
+
         frame.add(button, BorderLayout.SOUTH);
         frame.add(label, BorderLayout.NORTH);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -102,28 +102,9 @@ public class Main {
         mapViewer.setOverlayPainter(sp);
 
         button.addActionListener(e -> {
-            /*if (iItinary.get() >= itinaries.size()) {
-                return;
-            }
-            if (iStep.get() >= itinaries.get(iItinary.get()).getSteps().size() - 1) {
-                iItinary.getAndIncrement();
-                iStep.set(0);
-            }
-            if (iItinary.get() >= itinaries.size()) {
-                return;
-            }
-
-            iStep.getAndIncrement();
-            label.setText(itinaries.get(iItinary.get()).getSteps().get(iStep.get()).getInstruction());
-            try {
-                updateData(iStep.get(), iItinary.get());
-
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }*/
 
             try {
-                SelectionAdapter.updateData(mapViewer);
+                label.setText(SelectionAdapter.updateData(mapViewer));
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -161,31 +142,7 @@ public class Main {
         frame.setTitle(String.format("JXMapviewer2 Example 3 (%.2f / %.2f) - Zoom: %d", lat, lon, zoom));
     }
 
-    public static void updateData(int iStep, int iItinerary) throws IOException {
-        if (iItinerary == itinaries.size()) {
-            return;
-        }
-        for (int i = itinaries.get(iItinerary).getSteps().get(iStep - 1).getWaypoints()[0]; i < itinaries.get(iItinerary).getSteps().get(iStep - 1).getWaypoints()[1]; i++) {
-            itinaries.get(iItinerary).getTrack().remove(0);
-        }
-        updateData(mapViewer, itinaries);
-    }
 
-
-
-    public static List<Itinary> getItinaries(String response) throws IOException {
-        // Créez un ObjectMapper (Jackson) pour lire le fichier JSON
-        ObjectMapper objectMapper = new ObjectMapper();
-        List<Itinary> itinaries = new ArrayList<>();
-        // Utilisez l'ObjectMapper pour lire le fichier JSON en tant qu'objet JsonNode
-        JsonNode jsonNode = objectMapper.readTree(new StringReader(response));
-        for (JsonNode element : jsonNode) {
-            JsonNode name = element.get("features").get(0).get("geometry").get("coordinates");
-            itinaries.add(new Itinary(element));
-
-        }
-        return itinaries;
-    }
 
     public static void updateData(JXMapViewer mapViewer, List<Itinary> itinaries) throws IOException {
         List<RoutePainter> routePainters = new ArrayList<RoutePainter>();
