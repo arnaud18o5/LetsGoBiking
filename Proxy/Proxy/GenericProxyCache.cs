@@ -24,7 +24,7 @@ namespace Proxy
                 {
                     return default(T);
                 }
-                _cache.Add(CacheItemName, result, DateTimeOffset.Now.AddSeconds(dt_default_secondes));
+                _cache.Add(CacheItemName, result, DateTimeOffset.MaxValue);
             }
             else
             {
@@ -38,8 +38,12 @@ namespace Proxy
             if (!_cache.Contains(CacheItemName))
             {
                 // faire le call api et mettre en cache 
-                Task<string> result = requestAsync(CacheItemName);
-                _cache.Add(CacheItemName, result.Result, DateTimeOffset.Now.AddSeconds(dt_seconds));
+                string result = requestAsync(CacheItemName).Result;
+                if (result == null)
+                {
+                    return default(T);
+                }
+                _cache.Add(CacheItemName, result, DateTimeOffset.Now.AddSeconds(dt_seconds));
             }
             return (T)_cache.Get(CacheItemName);
         }
@@ -48,8 +52,12 @@ namespace Proxy
         {
             if (!_cache.Contains(CacheItemName))
             {
-                Task<string> result = requestAsync(CacheItemName);
-                _cache.Add(CacheItemName, result.Result, dt);
+                string result = requestAsync(CacheItemName).Result;
+                if (result == null)
+                {
+                    return default(T);
+                }
+                _cache.Add(CacheItemName, result, dt);
             }
             return (T)_cache.Get(CacheItemName);
         }

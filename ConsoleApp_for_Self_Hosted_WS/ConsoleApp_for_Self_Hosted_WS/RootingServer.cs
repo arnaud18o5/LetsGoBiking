@@ -67,7 +67,8 @@ namespace ConsoleApp_for_Rooting_Server
 
             //on cherche tous les stations jcdecaux
             string uriStations = "/stations?apiKey=27db0677318fc1ed93bfed36ce7a4a2bd32f9f07";
-            string responseStations = proxyClient.Get(jcdecauxApi + uriStations);
+            // on garde en cache les stations pendant 10 minutes
+            string responseStations = proxyClient.GetWithDTSeconds(jcdecauxApi + uriStations, 600);
             
             // find the 5 closest stations to start
 
