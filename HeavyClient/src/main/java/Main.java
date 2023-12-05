@@ -69,18 +69,17 @@ public class Main {
         TileFactoryInfo info = new OSMTileFactoryInfo();
         DefaultTileFactory tileFactory = new DefaultTileFactory(info);
         mapViewer.setTileFactory(tileFactory);
-        //itinaries = getItinaries();
         updateData(mapViewer, itinaries);
         List<GeoPosition> track = new ArrayList<>();
         for (Itinary itinary : itinaries) {
             track.addAll(itinary.getTrack());
         }
 
-        GeoPosition frankfurt = new GeoPosition(50.11, 8.68);
+        GeoPosition toulouse = new GeoPosition(43.6, 1.43);
 
         // Set the focus
         mapViewer.setZoom(7);
-        mapViewer.setAddressLocation(frankfurt);
+        mapViewer.setAddressLocation(toulouse);
         //mapViewer.zoomToBestFit(new HashSet<GeoPosition>(track), 0.7);
 
         // Add interactions
@@ -145,7 +144,7 @@ public class Main {
 
 
     public static void updateData(JXMapViewer mapViewer, List<Itinary> itinaries) throws IOException {
-        List<RoutePainter> routePainters = new ArrayList<RoutePainter>();
+
 
 
         // Exemple : Accédez à un champ spécifique dans le fichier JSON
