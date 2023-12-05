@@ -1,0 +1,6 @@
+
+_
+java:S1854,"=Remove this useless assignment to local variable "itinaries".(ø£Õ¥ıÿÿÿÿ8úòà±Ã1
+P
+java:S1481,".Remove this unused "itinaries" local variable.(ø£Õ¥ıÿÿÿÿ8üòà±Ã1
+G	java:S106-"+Replace this use of System.out by a logger.(ëôßÊ8úäã±Ã1
