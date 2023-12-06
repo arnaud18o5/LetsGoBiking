@@ -46,4 +46,21 @@ public interface IRootingServer {
         @WebParam(name = "endLongitude", targetNamespace = "http://tempuri.org/")
         Double endLongitude);
 
+    /**
+     * 
+     * @param startLocation
+     * @param endLocation
+     * @return
+     *     returns java.lang.String
+     */
+    @WebMethod(operationName = "GetItineraryViaNameLocation", action = "http://tempuri.org/IRootingServer/GetItineraryViaNameLocation")
+    @WebResult(name = "GetItineraryViaNameLocationResult", targetNamespace = "http://tempuri.org/")
+    @RequestWrapper(localName = "GetItineraryViaNameLocation", targetNamespace = "http://tempuri.org/", className = "com.soap.ws.client.generated.GetItineraryViaNameLocation")
+    @ResponseWrapper(localName = "GetItineraryViaNameLocationResponse", targetNamespace = "http://tempuri.org/", className = "com.soap.ws.client.generated.GetItineraryViaNameLocationResponse")
+    public String getItineraryViaNameLocation(
+        @WebParam(name = "startLocation", targetNamespace = "http://tempuri.org/")
+        String startLocation,
+        @WebParam(name = "endLocation", targetNamespace = "http://tempuri.org/")
+        String endLocation);
+
 }

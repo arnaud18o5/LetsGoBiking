@@ -38,6 +38,8 @@ public class SelectionAdapter extends MouseAdapter
     private static int iSteps = 0;
     private Point2D startPos = new Point2D.Double();
     private Point2D endPos = new Point2D.Double();
+    private static String startPoint;
+    private static String endPoint;
 
     private static Set<Waypoint> waypoints = new HashSet<Waypoint>();
 
@@ -147,28 +149,33 @@ public class SelectionAdapter extends MouseAdapter
     }
 
 
-    public static String searchItinerary(JXMapViewer mapViewer){
+    public static String searchItinerary(JXMapViewer mapViewer, String start, String end) throws IOException {
+        JsonNode jsonNode;
         if(waypoints.size() == 2) {
             try {
-                JsonNode jsonNode = itinerary.askForItinerary();
-                if(jsonNode == null)
-                    return "Impossible itinerary ! Choose other points.";
-                List<Itinary> itinaries = getItinaries(jsonNode.toString());
+                jsonNode = itinerary.askForItinerary();
 
-                updateData(mapViewer, itinaries);
-                List<GeoPosition> track = new ArrayList<>();
-                for (Itinary itinary : itinaries) {
-                    track.addAll(itinary.getTrack());
-                }
-                mapViewer.zoomToBestFit(new HashSet<GeoPosition>(track), 0.7);
-                return itinaries.get(0).getSteps().get(0).getInstruction();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
         }
+        else if(start!= null && end != null){
+            jsonNode = itinerary.askForItinerary(start, end);
+        }
         else{
             return "You need a start location and an end location to search an itinerary.";
         }
+        if(jsonNode == null)
+            return "Impossible itinerary ! Choose other points.";
+        List<Itinary> itinaries = getItinaries(jsonNode.toString());
+
+        updateData(mapViewer, itinaries);
+        List<GeoPosition> track = new ArrayList<>();
+        for (Itinary itinary : itinaries) {
+            track.addAll(itinary.getTrack());
+        }
+        mapViewer.zoomToBestFit(new HashSet<GeoPosition>(track), 0.7);
+        return itinaries.get(0).getSteps().get(0).getInstruction();
     }
 
     private static void updateMapMarkers(JXMapViewer mapViewer, Set <? extends Waypoint> waypoints) {

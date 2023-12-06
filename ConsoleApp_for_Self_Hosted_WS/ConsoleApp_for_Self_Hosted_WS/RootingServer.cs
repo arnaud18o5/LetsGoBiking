@@ -4,6 +4,7 @@ using Microsoft.JScript;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Device.Location;
 using System.Globalization;
@@ -31,17 +32,19 @@ namespace ConsoleApp_for_Rooting_Server
         
         public async Task<String> GetItinerary(double startLatitude, double startLongitude, double endLatitude, double endLongitude)
         {
+            return getItineraryFinal(startLatitude, startLongitude, endLatitude, endLongitude);
+        }
+
+
+        private string getItineraryFinal(double startLatitude, double startLongitude, double endLatitude, double endLongitude)
+        {
             // etape 1: regarder le trajet de start a end a pied pour s'en servir comme base
             // appel a l'api nominatim pour trouver start et end
-            string nominatimApi = "https://nominatim.openstreetmap.org";
             string jcdecauxApi = "https://api.jcdecaux.com/vls/v3";
 
             //List<Itinerary> itineraries = new List<Itinerary>();
             String itineraries;
-            //string getStartLocation = "/search?q=" + start + "&format=json&polygon_kml=1&addressdetails=1";
-            //string getEndLocation = "/search?q=" + end + "&format=json&polygon_kml=1&addressdetails=1";
-            //string responseStart = proxyClient.Get(nominatimApi + getStartLocation);
-            //string responseEnd = proxyClient.Get(nominatimApi + getEndLocation);
+            
 
             Console.WriteLine("Start point location:");
             Console.WriteLine(startLongitude.ToString(CultureInfo.InvariantCulture) + "," + startLatitude.ToString(CultureInfo.InvariantCulture));
@@ -69,7 +72,7 @@ namespace ConsoleApp_for_Rooting_Server
             string uriStations = "/stations?apiKey=27db0677318fc1ed93bfed36ce7a4a2bd32f9f07";
             // on garde en cache les stations pendant 10 minutes
             string responseStations = proxyClient.GetWithDTSeconds(jcdecauxApi + uriStations, 600);
-            
+
             // find the 5 closest stations to start
 
             var options = new JsonSerializerOptions
@@ -109,7 +112,7 @@ namespace ConsoleApp_for_Rooting_Server
             if (footDuration < distanceStartToStation + distanceStationToStation + distanceStationToEnd + 120) // we add 2 minutes to the itinerary to take the bike
             {
                 Console.WriteLine("No");
-                itineraries = "[" +getItinerary(startLocation, endLocation, "foot-walking") + "]";
+                itineraries = "[" + getItinerary(startLocation, endLocation, "foot-walking") + "]";
             }
             else
             {
@@ -148,14 +151,14 @@ namespace ConsoleApp_for_Rooting_Server
 
         public double getLatitudeNominatim(string content)
         {
-            var locationData = JsonConvert.DeserializeObject<LocationNominatim[]>(content);
-            return double.Parse( locationData[0].lat,  CultureInfo.InvariantCulture);
+            var locationData = content.Split(',');
+            return double.Parse(locationData[1], CultureInfo.InvariantCulture);
         }
 
         public double getLongitudeNominatim(string content)
         {
-            var locationData = JsonConvert.DeserializeObject<LocationNominatim[]>(content);
-            return double.Parse(locationData[0].lon, CultureInfo.InvariantCulture);
+            var locationData = content.Split(',');
+            return double.Parse(locationData[0], CultureInfo.InvariantCulture);
         }
 
         public LocationData LocationData(double latitude, double longitude)
@@ -245,9 +248,26 @@ namespace ConsoleApp_for_Rooting_Server
             
         }
 
-        public Task<List<Itinerary>> getItinerary(double startLatitude, double startLongitude, double endLatitude, double endLongitude)
+        public async Task<string> GetItineraryViaNameLocation(string start, string end)
         {
-            throw new NotImplementedException();
+            string nominatimApi = "https://nominatim.openstreetmap.org";
+
+            string getStartLocation = "/search?q=" + start + "&format=json&polygon_kml=1&addressdetails=1";
+            string getEndLocation = "/search?q=" + end + "&format=json&polygon_kml=1&addressdetails=1";
+            string responseStart = proxyClient.Get(nominatimApi + getStartLocation);
+            string responseEnd = proxyClient.Get(nominatimApi + getEndLocation);
+
+            string startLocation = getLocation(responseStart);
+            string endLocation = getLocation(responseEnd);
+
+            double startLat = getLatitudeNominatim(startLocation);
+            double startLon = getLongitudeNominatim(startLocation);
+            double endLat = getLatitudeNominatim(endLocation);
+            double endLon = getLongitudeNominatim(endLocation);
+
+
+
+            return getItineraryFinal(startLat, startLon, endLat, endLon);
         }
     }
 

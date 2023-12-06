@@ -48,6 +48,8 @@ public class Main {
         JFrame frame = new JFrame("JXMapviewer2 Example 2");
         JButton button = new JButton("Next");
         JButton search = new JButton("Search Itinerary");
+        JTextField startPoint = new JTextField("Youre start location");
+        JTextField endPoint = new JTextField("Youre end location");
         JLabel label = new JLabel("Select a starting point and an ending point by clicking on the map.");
         Boolean over = false;
         AtomicInteger iStep = new AtomicInteger();
@@ -56,6 +58,8 @@ public class Main {
         frame.setSize(800, 600);
 
         JPanel buttonPanel = new JPanel();
+        buttonPanel.add(startPoint);
+        buttonPanel.add(endPoint);
         buttonPanel.add(button);
         buttonPanel.add(search);
 
@@ -113,7 +117,11 @@ public class Main {
 
         search.addActionListener(e -> {
             label.setText("Searching best itinerary...");
-            label.setText(SelectionAdapter.searchItinerary(mapViewer));
+            try {
+                label.setText(SelectionAdapter.searchItinerary(mapViewer, startPoint.getText(), endPoint.getText()));
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         });
 
         mapViewer.addPropertyChangeListener("zoom", new PropertyChangeListener()

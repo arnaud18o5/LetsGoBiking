@@ -50,6 +50,9 @@ public class ObjectFactory {
     private final static QName _Duration_QNAME = new QName("http://schemas.microsoft.com/2003/10/Serialization/", "duration");
     private final static QName _Guid_QNAME = new QName("http://schemas.microsoft.com/2003/10/Serialization/", "guid");
     private final static QName _GetItineraryResponseGetItineraryResult_QNAME = new QName("http://tempuri.org/", "GetItineraryResult");
+    private final static QName _GetItineraryViaNameLocationStartLocation_QNAME = new QName("http://tempuri.org/", "startLocation");
+    private final static QName _GetItineraryViaNameLocationEndLocation_QNAME = new QName("http://tempuri.org/", "endLocation");
+    private final static QName _GetItineraryViaNameLocationResponseGetItineraryViaNameLocationResult_QNAME = new QName("http://tempuri.org/", "GetItineraryViaNameLocationResult");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: com.soap.ws.client.generated
@@ -72,6 +75,22 @@ public class ObjectFactory {
      */
     public GetItineraryResponse createGetItineraryResponse() {
         return new GetItineraryResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetItineraryViaNameLocation }
+     * 
+     */
+    public GetItineraryViaNameLocation createGetItineraryViaNameLocation() {
+        return new GetItineraryViaNameLocation();
+    }
+
+    /**
+     * Create an instance of {@link GetItineraryViaNameLocationResponse }
+     * 
+     */
+    public GetItineraryViaNameLocationResponse createGetItineraryViaNameLocationResponse() {
+        return new GetItineraryViaNameLocationResponse();
     }
 
     /**
@@ -358,6 +377,45 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://tempuri.org/", name = "GetItineraryResult", scope = GetItineraryResponse.class)
     public JAXBElement<String> createGetItineraryResponseGetItineraryResult(String value) {
         return new JAXBElement<String>(_GetItineraryResponseGetItineraryResult_QNAME, String.class, GetItineraryResponse.class, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
+     * 
+     * @param value
+     *     Java instance representing xml element's value.
+     * @return
+     *     the new instance of {@link JAXBElement }{@code <}{@link String }{@code >}
+     */
+    @XmlElementDecl(namespace = "http://tempuri.org/", name = "startLocation", scope = GetItineraryViaNameLocation.class)
+    public JAXBElement<String> createGetItineraryViaNameLocationStartLocation(String value) {
+        return new JAXBElement<String>(_GetItineraryViaNameLocationStartLocation_QNAME, String.class, GetItineraryViaNameLocation.class, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
+     * 
+     * @param value
+     *     Java instance representing xml element's value.
+     * @return
+     *     the new instance of {@link JAXBElement }{@code <}{@link String }{@code >}
+     */
+    @XmlElementDecl(namespace = "http://tempuri.org/", name = "endLocation", scope = GetItineraryViaNameLocation.class)
+    public JAXBElement<String> createGetItineraryViaNameLocationEndLocation(String value) {
+        return new JAXBElement<String>(_GetItineraryViaNameLocationEndLocation_QNAME, String.class, GetItineraryViaNameLocation.class, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
+     * 
+     * @param value
+     *     Java instance representing xml element's value.
+     * @return
+     *     the new instance of {@link JAXBElement }{@code <}{@link String }{@code >}
+     */
+    @XmlElementDecl(namespace = "http://tempuri.org/", name = "GetItineraryViaNameLocationResult", scope = GetItineraryViaNameLocationResponse.class)
+    public JAXBElement<String> createGetItineraryViaNameLocationResponseGetItineraryViaNameLocationResult(String value) {
+        return new JAXBElement<String>(_GetItineraryViaNameLocationResponseGetItineraryViaNameLocationResult_QNAME, String.class, GetItineraryViaNameLocationResponse.class, value);
     }
 
 }

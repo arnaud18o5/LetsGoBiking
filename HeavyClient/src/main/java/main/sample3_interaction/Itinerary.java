@@ -57,4 +57,19 @@ public class Itinerary {
         System.out.print(node);
         return node;
     }
+
+    public JsonNode askForItinerary(String start, String end) throws IOException {
+        RootingServer rootingServer = new RootingServer();
+        ObjectMapper objectMapper = new ObjectMapper();
+        String response =  "";
+        try{
+            response = rootingServer.getBasicHttpBindingIRootingServer().getItineraryViaNameLocation(start,  end);
+        } catch(Exception e){
+            return null;
+        }
+        System.out.println(response);
+        JsonNode node = objectMapper.readTree(new StringReader(response));
+        System.out.print(node);
+        return node;
+    }
 }

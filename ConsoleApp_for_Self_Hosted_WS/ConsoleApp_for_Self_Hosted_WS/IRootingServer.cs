@@ -14,6 +14,9 @@ namespace ConsoleApp_for_Rooting_Server
     {
         [OperationContract()]
         Task<String> GetItinerary(double startLatitude, double startLongitude, double endLatitude, double endLongitude);
+
+        [OperationContract()]
+        Task<String> GetItineraryViaNameLocation(String startLocation, String endLocation);
     }
 
 
